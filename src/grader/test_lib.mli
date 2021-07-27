@@ -534,6 +534,12 @@ module type S = sig
 
   end
 
+
+  (** TODO: doc. *)
+  module Test_functions_vg_var : sig
+    val test_vg_against_solution: string -> Learnocaml_report.t
+  end
+
   (** {1 Grading functions for types} *)
 
   (** Grading function for types. *)
@@ -1085,7 +1091,7 @@ module type S = sig
 
     (** [run_timeout ?time v] executes [v()] under an optional time limit.
         The exceptions raised by [v] are intentionally *not* caught,
-        so the caller is able to catch and get a backtrace, if desired. 
+        so the caller is able to catch and get a backtrace, if desired.
         If given, [time] overrides the global timeout parameter.
     *)
     val run_timeout : ?time:int -> (unit -> 'a) -> 'a
@@ -1235,6 +1241,7 @@ module type S = sig
    include (module type of Sampler)
    include (module type of Test_functions_types)
    include (module type of Test_functions_ref_var)
+   include (module type of Test_functions_vg_var)
    include (module type of Test_functions_function)
    include (module type of Test_functions_generic)
 end

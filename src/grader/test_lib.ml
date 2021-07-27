@@ -147,6 +147,12 @@ module type S = sig
 
   (*----------------------------------------------------------------------------*)
 
+  module Test_functions_vg_var : sig
+    val test_vg_against_solution: string -> Learnocaml_report.t
+  end
+
+  (*----------------------------------------------------------------------------*)
+
   module Test_functions_types : sig
     val compatible_type : expected:string -> string -> Learnocaml_report.t
 
@@ -441,6 +447,7 @@ module type S = sig
   include (module type of Sampler)
   include (module type of Test_functions_types)
   include (module type of Test_functions_ref_var)
+  include (module type of Test_functions_vg_var)
   include (module type of Test_functions_function)
   include (module type of Test_functions_generic)
 
@@ -1408,6 +1415,19 @@ module Make
 
   (*----------------------------------------------------------------------------*)
 
+  module Test_functions_vg_var = struct
+    open Test_functions_generic
+    open Learnocaml_report
+
+    let test_vg_against_solution (_name: string) : Learnocaml_report.t =
+      let _img = Vg.(I.const Gg.(Color.gray 0.5)) in
+      (* test_value (lookup_student [%ty : Vg.image] name) @@ fun img -> *)
+      [ Message ([Text "Correct image"; Break; Image "testimage" ], Success 1) ]
+
+  end
+
+  (*----------------------------------------------------------------------------*)
+
   module Test_functions_function = struct
     open Test_functions_generic
 
@@ -1805,6 +1825,7 @@ module Make
   include Sampler
   include Test_functions_types
   include Test_functions_ref_var
+  include Test_functions_vg_var
   include Test_functions_function
   include Test_functions_generic
 

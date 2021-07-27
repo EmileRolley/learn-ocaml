@@ -100,7 +100,7 @@ module Args_exercises = struct
   type t = {
     solution_file: string option;
     exercise_id: string option;
-    output_format: [`Console|`Json|`Html|`Raw];
+    output_format: [`Console | `Json|`Html|`Raw];
     submit: bool;
     color: bool;
     verbosity: int;
@@ -382,7 +382,8 @@ let console_report ?(verbose=false) ex report =
         | Break -> "\n"
         | Code s when String.contains s '\n' -> "\n"^block ~border_color:[`Cyan] s
         | Code s -> color [`Cyan] s
-        | Output s -> block ~border_color:[`Yellow] s)
+        | Output s -> block ~border_color:[`Yellow] s
+        | Image _ -> "SVG image")
       t
   in
   let rec all_good report =
@@ -600,7 +601,7 @@ let get_config_o ?save_back ?(allow_static=false) o =
 module Init = struct
   open Args_global
   open Args_create_token
-     
+
   let init global_args create_token_args =
     let path = if global_args.local then ConfigFile.local_path else ConfigFile.user_path in
     let get_token server =
@@ -639,7 +640,7 @@ module Init = struct
       ~doc:"Initialize the configuration file."
       "init"
 end
-  
+
 module Grade = struct
   open Args_exercises
   let grade go eo =
@@ -755,17 +756,17 @@ module Print_server = struct
     >>= fun config ->
     Lwt_io.printl (Uri.to_string config.ConfigFile.server)
     >|= fun () -> 0
-                
+
   let explanation = "Just print the configured server."
-                  
+
   let man = man explanation
-          
+
   let cmd =
     use_global print_server,
     Term.info ~man ~doc:explanation "print-server"
-    
+
 end
-                    
+
 module Set_options = struct
   let set_opts o =
     get_config_o ~save_back:true ~allow_static:true o
@@ -926,7 +927,7 @@ module Template = struct
       ~doc:"Get the template of a given exercise."
       "template"
 end
-                
+
 module Exercise_list = struct
   let doc= "Get a structured json containing a list of the exercises of the server"
 
@@ -942,19 +943,19 @@ module Exercise_list = struct
     in
     let json =
            match ezjsonm with
-           | `O _ | `A _ as json -> json 
+           | `O _ | `A _ as json -> json
            | _ -> assert false
     in
     Ezjsonm.to_channel ~minify:false stdout json;
     Lwt.return 0;)
 
   let man = man doc
-          
+
   let cmd =
     use_global exercise_list,
     Term.info ~man ~doc:doc "exercise-list"
 end
-                
+
 module Main = struct
   let man =
     man

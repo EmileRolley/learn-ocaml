@@ -29,6 +29,8 @@ and inline =
   | Text of string (** A word *)
   | Break (** Line separator *)
   | Code of string (** For expressions *)
+  (* | Image of Vg.image *)
+  | Image of string
   | Output of string (** For output *)
 
 (** Gets the total successes of a report, and tells if a failure happened *)

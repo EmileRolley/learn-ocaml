@@ -4,7 +4,7 @@
  (flags :standard -w -37-41 -warn-error -27-39)
  (modules Learnocaml_report)
  (preprocess (pps ppx_ocplib_i18n))
- (libraries ocplib-json-typed ocplib_i18n)
+ (libraries ocplib-json-typed ocplib_i18n vg vg.svg)
 )
 
 (rule
